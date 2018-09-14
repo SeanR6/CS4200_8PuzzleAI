@@ -8,7 +8,7 @@ public class Board {
     private List<Integer> gameBoard = new ArrayList();
     private boolean validBoard;
 
-    public Board(){
+    Board(){
         for(int i = 0; i < 9; i++){
             gameBoard.add(i);
         }
@@ -16,6 +16,7 @@ public class Board {
     }
 
     private void randomizeBoard(){
+        Collections.sort(gameBoard);
         for(int i = 0; i < 9; i++){
             Collections.swap(gameBoard, i, RandomGenerator.generateNum());
         }
@@ -27,14 +28,6 @@ public class Board {
     }
 
     public void printBoard(){
-        System.out.println(gameBoard.get(0) + " " + gameBoard.get(1) + " " + gameBoard.get(2));
-        System.out.println(gameBoard.get(3) + " " + gameBoard.get(4) + " " + gameBoard.get(5));
-        System.out.println(gameBoard.get(6) + " " + gameBoard.get(7) + " " + gameBoard.get(8));
-
-        if(validBoard == true){
-            System.out.println("The board is valid");
-        }else{
-            System.out.println("The board is invalid");
-        }
+        UI.printBoard(gameBoard);
     }
 }

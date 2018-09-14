@@ -20,7 +20,9 @@ public class Main {
         //  for manhattan distance, translate array into a 3x3 board
         //g(n) is number of moves made so far
 
-
+        //TODO keep in mind search costs, which are the number of nodes created
+        //^^each node depth will have its own set of costs, try maybe an array of the depth
+        //   then each of those will have a n=2 array for h1 and then h2, so that they can be easily compared
 
         //tests:
         Board gameBoard = new Board();
