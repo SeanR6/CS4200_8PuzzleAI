@@ -1,4 +1,4 @@
-package com.company;
+package edu.cpp.cs4200.Project1;
 
 public class Main {
 
@@ -23,7 +23,8 @@ public class Main {
 
 
         //tests:
-        int[] array = new int[]{1, 2, 3, 0, 4, 6, 8, 5, 7};
-        System.out.println(ValidCheck.isValid(array));
+        Board gameBoard = new Board();
+        gameBoard.isValid();
+        gameBoard.printBoard();
     }
 }

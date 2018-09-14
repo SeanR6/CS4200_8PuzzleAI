@@ -1,7 +1,7 @@
-package com.company;
+package edu.cpp.cs4200.Project1;
 
 public class ValidCheck {
-    public static boolean isValid(int[] tile){
+    public static boolean isValid(Integer[] tile){
         int inversions = 0;
         for(int i = 0; i < 9; i++){
             if(tile[i] > i && tile[i] != 0){
