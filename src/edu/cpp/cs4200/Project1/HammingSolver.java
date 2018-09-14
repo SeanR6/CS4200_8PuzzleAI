@@ -18,11 +18,14 @@ public class HammingSolver {
         while(!checkIfSolved(gameBoard)){
             if(gameBoard[0] == 0){
                 searchCost+=2;
-                Hamming()
-            }
+                Hamming();
+            }//create alternate states, determine the cost of those states, then set the current board to that state
         }
     }
-    
+
+    private void Hamming() {
+    }
+
 
     private void swap(int a, int b) {
         int placeholder = gameBoard[a];
