@@ -1,6 +1,7 @@
 package edu.cpp.cs4200.Project1;
 
 import java.util.List;
+import java.util.Queue;
 
 public class UI {
     //this class allows for interaction with the user. Gets input and prints output. Allows for the other files
@@ -16,7 +17,13 @@ public class UI {
         System.out.println(board[0] + " " + board[1] + " " + board[2]);
         System.out.println(board[3] + " " + board[4] + " " + board[5]);
         System.out.println(board[6] + " " + board[7] + " " + board[8]);
-        System.out.println("-------------------");
+        System.out.println("--------------------------");
+    }
+
+    static void printSolution(Queue<Integer[]> solution){
+        while(!solution.isEmpty()){
+            printBoard(solution.poll());
+        }
     }
 
     static void printValidity(boolean isValid){
