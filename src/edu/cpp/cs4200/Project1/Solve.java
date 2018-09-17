@@ -23,6 +23,8 @@ public class Solve {
 
         PriorityQueue<Nodes> Q = new PriorityQueue<>(Comparator.comparingInt(a -> a.weight));
 
+        List<Nodes> solution = new ArrayList<>();
+
         boolean validTest = true;
         int turnsTaken = 0;
         int searchCost = 0;
@@ -137,7 +139,10 @@ public class Solve {
             if(parent == Q.peek().gameBoard){
                 Q.poll();
             }
+            //TODO DO STUFF WITH THE SOLUTION
+            solution.add(Q.peek());
             gameBoard = Q.peek().gameBoard;
+            parent = Q.peek().parent;
             turnsTaken = Q.poll().depth;
             UI.printBoard(gameBoard);
             System.out.println("------------------DEPTH = " + turnsTaken);
@@ -154,7 +159,9 @@ public class Solve {
         if(validTest == true){
             data = new HammingData(turnsTaken, searchCost);
             System.out.println("Solved");
+
         }
+
         return data;
 
         //TODO remember to calculate and print the average times
