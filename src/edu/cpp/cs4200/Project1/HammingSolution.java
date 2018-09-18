@@ -8,62 +8,110 @@ public class HammingSolution {
     private static Integer[] emptyParent = new Integer[]{0,0,0,0,0,0,0,0,0,0};
     private static Node emptyNodeParent = new Node(emptyParent, Integer.MAX_VALUE, Integer.MAX_VALUE, null);
 
-    public static void solve(Integer[] board){
+    public static Node solve(Integer[] board){
         Node nodeStart = new Node(board, getHamming(board), 0, emptyNodeParent);
         Node finalSolution = new Node(null, Integer.MAX_VALUE - 10, Integer.MAX_VALUE - 10, null);
         Queue<Node> successors;
         depth = 0;
         solutionSize = 0;
-        Node nodeCurrent = null;
+        Node finalNode = null;
         List<Node> closedList = new ArrayList<>();
+        boolean finished = false;
 
         PriorityQueue<Node> openList = new PriorityQueue<>(Comparator.comparingInt(a -> a.weight));
         openList.add(nodeStart);
-
-
+        Node q;
+        Queue<Node> children;
         while(!openList.isEmpty()){
-            nodeCurrent = openList.poll();
+            q = openList.poll();
+            children = generateSuccessors(q);
 
-            if(checkIfFinished(nodeCurrent.gameBoard)){
-                if(finalSolution.weight > nodeCurrent.weight){
-                    finalSolution = nodeCurrent;
+            while(!children.isEmpty()){
+                Node child = children.poll();
+                if(checkIfFinished(child.gameBoard)){
+                    finalNode = child;
+                    finished = true;
+                    break;
                 }
-                break;
-            }
-
-            //create function: Generate successors, add to list, don't add parent successor
-            depth = nodeCurrent.depth + 1;
-            successors = generateSuccessors(nodeCurrent);
-        //issue with comparing gameboards, it looks like it checks for an id
-            //also look for adding to closed and open list, there are duplicates which shouldnt be there
-            while(!successors.isEmpty()){
-                Node successor = successors.poll();
-                if(openList.contains(successor.gameBoard)){
-                    Iterator<Node> boardInList = openList.iterator();
-                    while(boardInList.hasNext()){
-                        Node listBoard = boardInList.next();
-                        if(listBoard.gameBoard.equals(successor.gameBoard) && listBoard.weight < successor.weight){
-                            continue;
-                        }
-                    }
-                }else if(closedList.contains(successor.gameBoard)){
-                    int index = closedList.indexOf(successor.gameBoard);
-                    if(closedList.get(index).weight < successor.weight){
+                int index = containsBoard(child, openList);
+                if(index < openList.size()){
+                    Iterator<Node> iter = openList.iterator();
+                    Node item = null;
+                    while(index > 0){
+                        item = iter.next();
+                        index--;
+                    }//TODO fix weight comparison, it is always being set to 6
+                    if(child.weight < item.weight){
+                        openList.remove(item);
+                        openList.add(child);
+                        continue;
+                    }else {
                         continue;
                     }
-                    closedList.remove(index);
-                    openList.add(successor);
-                    solutionSize++;
-                }else{
-                    openList.add(successor);
-                    solutionSize++;
                 }
+                index = containsBoard(child, closedList);
+                Node item = null;
+                if(index < closedList.size()){
+                    item = closedList.get(index);
+                    if(child.weight < item.weight){
+                        closedList.remove(index);
+                        openList.add(child);
+                        continue;
+                    }else{
+                        continue;
+                    }
+                }
+                openList.add(child);
             }
-            closedList.add(nodeCurrent);
+            if(finished == true){
+                break;
+            }
+            closedList.add(q);
         }
 
-        //node current should be guaranteed to tbe the smallest node
-        printSolution(nodeCurrent);
+
+
+        //node current should be guaranteed to the the smallest node
+        printSolution(finalNode);
+        return nodeStart;
+    }
+
+
+
+    static int containsBoard(Node in, PriorityQueue<Node> q){
+        Iterator<Node> i = q.iterator();
+        int index = 0;
+        while(i.hasNext()){
+            index++;
+            //use comparator function here
+            if(comparator(in.gameBoard, i.next().gameBoard)){
+                break;
+            }
+        }
+        return index;
+    }
+
+    static int containsBoard(Node in, List<Node> list){
+        Iterator<Node> i = list.iterator();
+        int index = 0;
+        while(i.hasNext()){
+            index++;
+            //use comparator function here
+            if(comparator(in.gameBoard, i.next().gameBoard)){
+                index--;
+                break;
+            }
+        }
+        return index;
+    }
+
+    static boolean comparator(Integer[] a, Integer[] b){
+        for(int i = 0; i < 9; i++){
+            if(a[i] != b[i]){
+                return false;
+            }
+        }
+        return true;
     }
 
     private static void printSolution(Node nodeCurrent) {
@@ -86,107 +134,107 @@ public class HammingSolution {
         Integer[] tempBoard;
         if(currentBoard[0] == 0){
             tempBoard = moveRight(currentBoard.clone(), 0);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 0);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[1] == 0){
             tempBoard = moveRight(currentBoard.clone(), 1);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 1);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveLeft(currentBoard.clone(), 1);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[2] == 0){
             tempBoard = moveDown(currentBoard.clone(), 2);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveLeft(currentBoard.clone(), 2);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[3] == 0){
             tempBoard = moveRight(currentBoard.clone(), 3);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 3);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 3);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[4] == 0){
             tempBoard = moveRight(currentBoard.clone(), 4);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 4);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 4);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveLeft(currentBoard.clone(), 4);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[5] == 0){
             tempBoard = moveLeft(currentBoard.clone(), 5);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 5);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 5);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[6] == 0){
             tempBoard = moveUp(currentBoard.clone(), 6);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveRight(currentBoard.clone(), 6);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[7] == 0){
             tempBoard = moveLeft(currentBoard.clone(), 7);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveRight(currentBoard.clone(), 7);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 7);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }else if(currentBoard[8] == 0){
             tempBoard = moveUp(currentBoard.clone(), 7);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
             tempBoard = moveLeft(currentBoard.clone(), 7);
-            if(tempBoard != nodeCurrent.parent.gameBoard){
+            if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
             }
         }
@@ -223,11 +271,10 @@ public class HammingSolution {
 
     private static boolean checkIfFinished(Integer[] gameBoard) {
         Integer[] solutionArray = {1,2,3,4,5,6,7,8};
-        List solutionList = new ArrayList(Arrays.asList(solutionArray));
         List gameList = new ArrayList(Arrays.asList(gameBoard));
         gameList.remove(gameList.indexOf(0));
 
-        return gameList.equals(solutionList);
+        return Arrays.equals(solutionArray, gameList.toArray());
     }
     public static int getHamming(Integer[] boardInput){
         //allows the zero to be completely ignored
