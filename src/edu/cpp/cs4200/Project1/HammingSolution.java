@@ -10,8 +10,6 @@ public class HammingSolution {
 
     public static Node solve(Integer[] board){
         Node nodeStart = new Node(board, getHamming(board), 0, emptyNodeParent);
-        Node finalSolution = new Node(null, Integer.MAX_VALUE - 10, Integer.MAX_VALUE - 10, null);
-        Queue<Node> successors;
         depth = 0;
         solutionSize = 0;
         Node finalNode = null;
@@ -24,6 +22,7 @@ public class HammingSolution {
         Queue<Node> children;
         while(!openList.isEmpty()){
             q = openList.poll();
+            depth = q.depth;
             children = generateSuccessors(q);
 
             while(!children.isEmpty()){
@@ -117,14 +116,16 @@ public class HammingSolution {
     private static void printSolution(Node nodeCurrent) {
         Stack<Node> printStack = new Stack<>();
         Node currentNode = nodeCurrent;
+        int treeDepth = 0;
         while(!currentNode.gameBoard.equals(emptyParent)){
             printStack.push(currentNode);
             currentNode = currentNode.parent;
+            treeDepth++;
         }
         while(!printStack.isEmpty()){
             UI.printBoard(printStack.pop().gameBoard);
         }
-        System.out.println("Solution depth " + (depth - 1));
+        System.out.println("Solution depth " + (treeDepth - 1));
         System.out.println("Solution size " + solutionSize);
     }
 
@@ -134,108 +135,117 @@ public class HammingSolution {
         Integer[] tempBoard;
         if(currentBoard[0] == 0){
             tempBoard = moveRight(currentBoard.clone(), 0);
+            solutionSize++;
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 0);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }else if(currentBoard[1] == 0){
+            solutionSize += 2;
             tempBoard = moveRight(currentBoard.clone(), 1);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 1);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveLeft(currentBoard.clone(), 1);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }else if(currentBoard[2] == 0){
+            solutionSize++;
             tempBoard = moveDown(currentBoard.clone(), 2);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveLeft(currentBoard.clone(), 2);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }else if(currentBoard[3] == 0){
+            solutionSize += 2;
             tempBoard = moveRight(currentBoard.clone(), 3);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 3);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 3);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }else if(currentBoard[4] == 0){
+            solutionSize += 3;
             tempBoard = moveRight(currentBoard.clone(), 4);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 4);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 4);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveLeft(currentBoard.clone(), 4);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }else if(currentBoard[5] == 0){
+            solutionSize += 2;
             tempBoard = moveLeft(currentBoard.clone(), 5);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveDown(currentBoard.clone(), 5);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 5);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }else if(currentBoard[6] == 0){
+            solutionSize++;
             tempBoard = moveUp(currentBoard.clone(), 6);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveRight(currentBoard.clone(), 6);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
+            solutionSize += 2;
         }else if(currentBoard[7] == 0){
             tempBoard = moveLeft(currentBoard.clone(), 7);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveRight(currentBoard.clone(), 7);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
             tempBoard = moveUp(currentBoard.clone(), 7);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }else if(currentBoard[8] == 0){
-            tempBoard = moveUp(currentBoard.clone(), 7);
+            solutionSize++;
+            tempBoard = moveUp(currentBoard.clone(), 8);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
-            tempBoard = moveLeft(currentBoard.clone(), 7);
+            tempBoard = moveLeft(currentBoard.clone(), 8);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
-                output.add(new Node(tempBoard, getHamming(tempBoard), depth, nodeCurrent));
+                output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
         }
         return output;
