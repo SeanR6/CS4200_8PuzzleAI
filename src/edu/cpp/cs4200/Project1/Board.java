@@ -25,7 +25,7 @@ public class Board {
     public void solveHamming(){
          isValid();
          if(validBoard) {
-             HammingSolution.solve((Integer[]) gameBoard.toArray());
+             HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
          }
     }
     //TODO generate new function that allows us to generate a board using n number of moves such that we can have

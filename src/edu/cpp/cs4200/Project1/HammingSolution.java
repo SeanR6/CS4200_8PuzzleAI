@@ -5,10 +5,12 @@ import java.util.*;
 public class HammingSolution {
     private static int depth;
     private static int solutionSize;
+    private static Integer[] emptyParent = new Integer[]{0,0,0,0,0,0,0,0,0,0};
+    private static Node emptyNodeParent = new Node(emptyParent, Integer.MAX_VALUE, Integer.MAX_VALUE, null);
 
     public static void solve(Integer[] board){
-        Node nodeStart = new Node(board, getHamming(board), 0, null);
-        Node finalSolution = new Node(null, Integer.MAX_VALUE, Integer.MAX_VALUE, null );
+        Node nodeStart = new Node(board, getHamming(board), 0, emptyNodeParent);
+        Node finalSolution = new Node(null, Integer.MAX_VALUE - 10, Integer.MAX_VALUE - 10, null);
         Queue<Node> successors;
         depth = 0;
         solutionSize = 0;
@@ -30,9 +32,10 @@ public class HammingSolution {
             }
 
             //create function: Generate successors, add to list, don't add parent successor
-            ++depth;
+            depth = nodeCurrent.depth + 1;
             successors = generateSuccessors(nodeCurrent);
-
+        //issue with comparing gameboards, it looks like it checks for an id
+            //also look for adding to closed and open list, there are duplicates which shouldnt be there
             while(!successors.isEmpty()){
                 Node successor = successors.poll();
                 if(openList.contains(successor.gameBoard)){
@@ -50,8 +53,10 @@ public class HammingSolution {
                     }
                     closedList.remove(index);
                     openList.add(successor);
+                    solutionSize++;
                 }else{
                     openList.add(successor);
+                    solutionSize++;
                 }
             }
             closedList.add(nodeCurrent);
@@ -62,15 +67,17 @@ public class HammingSolution {
     }
 
     private static void printSolution(Node nodeCurrent) {
-        Queue<Node> printQueue = new LinkedList<>();
+        Stack<Node> printStack = new Stack<>();
         Node currentNode = nodeCurrent;
-        while(!printQueue.peek().parent.equals(null)){
-            printQueue.add(currentNode);
+        while(!currentNode.gameBoard.equals(emptyParent)){
+            printStack.push(currentNode);
             currentNode = currentNode.parent;
         }
-        while(!printQueue.isEmpty()){
-            UI.printBoard(printQueue.poll().gameBoard);
+        while(!printStack.isEmpty()){
+            UI.printBoard(printStack.pop().gameBoard);
         }
+        System.out.println("Solution depth " + (depth - 1));
+        System.out.println("Solution size " + solutionSize);
     }
 
     private static Queue<Node> generateSuccessors(Node nodeCurrent) {
@@ -216,11 +223,11 @@ public class HammingSolution {
 
     private static boolean checkIfFinished(Integer[] gameBoard) {
         Integer[] solutionArray = {1,2,3,4,5,6,7,8};
-        List solutionList = new ArrayList();
-        solutionList = Arrays.asList(solutionArray);
-        solutionList.remove(solutionList.indexOf(0));
+        List solutionList = new ArrayList(Arrays.asList(solutionArray));
+        List gameList = new ArrayList(Arrays.asList(gameBoard));
+        gameList.remove(gameList.indexOf(0));
 
-        return gameBoard.equals(solutionList.toArray());
+        return gameList.equals(solutionList);
     }
     public static int getHamming(Integer[] boardInput){
         //allows the zero to be completely ignored
