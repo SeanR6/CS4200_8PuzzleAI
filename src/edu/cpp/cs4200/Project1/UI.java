@@ -20,11 +20,6 @@ public class UI {
         System.out.println("--------------------------");
     }
 
-    static void printSolution(Queue<Integer[]> solution){
-        while(!solution.isEmpty()){
-            printBoard(solution.poll());
-        }
-    }
 
     static void printValidity(boolean isValid){
         if(isValid){
@@ -33,4 +28,5 @@ public class UI {
             System.out.println("The puzzle is invalid");
         }
     }
+
 }

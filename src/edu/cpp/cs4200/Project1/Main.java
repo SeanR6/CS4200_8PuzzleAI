@@ -25,8 +25,10 @@ public class Main {
         //   then each of those will have a n=2 array for h1 and then h2, so that they can be easily compared
 
         //tests:
-        Integer[] board = new Integer[]{3,1,2,6,4,5,0,7,8};
+        Integer[] board = new Integer[]{3,1,2,4,0,5,6,7,8};
         Board gameBoard = new Board(board);
         gameBoard.solveHamming();
+
+
     }
 }

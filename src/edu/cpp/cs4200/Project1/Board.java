@@ -25,12 +25,11 @@ public class Board {
     public void solveHamming(){
          isValid();
          if(validBoard) {
-             HammingData temp = Solve.solveHamming(gameBoard.toArray(new Integer[gameBoard.size()]));
-             System.out.println("Depth = " + temp.depth);
-             System.out.println("Search Cost = " + temp.searchCost);
+             HammingSolution.solve((Integer[]) gameBoard.toArray());
          }
     }
-
+    //TODO generate new function that allows us to generate a board using n number of moves such that we can have
+        //a definite depth, consider complete randomization though
     private void randomizeBoard(){
         Collections.sort(gameBoard);
         for(int i = 0; i < 9; i++){
@@ -42,6 +41,10 @@ public class Board {
         Integer[] array = gameBoard.toArray(new Integer[gameBoard.size()]);
         validBoard = ValidCheck.isValid(array);
         UI.printValidity(validBoard);
+    }
+
+    public void generateNewBoard(){
+        randomizeBoard();
     }
 
     public void printBoard(){
