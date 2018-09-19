@@ -10,7 +10,7 @@ public class HammingSolution {
     private static Integer[] emptyParent = new Integer[]{0,0,0,0,0,0,0,0,0,0};
     private static Node emptyNodeParent = new Node(emptyParent, Integer.MAX_VALUE, Integer.MAX_VALUE, null);
 
-    public static HammingData solve(Integer[] board) {
+    public static SolutionData solve(Integer[] board) {
         Node nodeStart = new Node(board, getHamming(board), 0, emptyNodeParent);
         depth = 0;
         solutionSize = 0;
@@ -72,11 +72,11 @@ public class HammingSolution {
 
         if (depth < 23) {
             //node current should be guaranteed to the the smallest node
-            HammingData output = new HammingData(printSolution(finalNode), solutionSize);
+            SolutionData output = new SolutionData(printSolution(finalNode), solutionSize);
             return output;
         }
 
-        return new HammingData(0, 0);
+        return new SolutionData(0, 0);
     }
 
 
@@ -257,42 +257,41 @@ public class HammingSolution {
     }
 
     private static boolean checkIfFinished(Integer[] gameBoard) {
-        Integer[] solutionArray = {1,2,3,4,5,6,7,8};
-        List gameList = new ArrayList(Arrays.asList(gameBoard));
-        gameList.remove(gameList.indexOf(0));
+        Integer[] solutionArray = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
-        return Arrays.equals(solutionArray, gameList.toArray());
+        return Arrays.equals(solutionArray, gameBoard);
     }
-    public static int getHamming(Integer[] boardInput){
-        //allows the zero to be completely ignored
-        List<Integer> board = new ArrayList<>(Arrays.asList(boardInput));
-        int index = board.indexOf(0);
-        board.remove(index);
+
+    public static int getHamming(Integer[] board) {
+
 
         //returns the heuristic for manhattan
         int count = 0;
-        if(board.get(0) != 1){
+        if (board[0] != 0) {
             ++count;
         }
-        if(board.get(1) != 2){
+        if (board[1] != 1) {
             ++count;
         }
-        if(board.get(2) != 3){
+        if (board[2] != 2) {
             ++count;
         }
-        if(board.get(3) != 4){
+        if (board[3] != 3) {
             ++count;
         }
-        if(board.get(4) != 5){
+        if (board[4] != 4) {
             ++count;
         }
-        if(board.get(5) != 6){
+        if (board[5] != 5) {
             ++count;
         }
-        if(board.get(6) != 7){
+        if (board[6] != 6) {
             ++count;
         }
-        if(board.get(7) != 8){
+        if (board[7] != 7) {
+            ++count;
+        }
+        if (board[8] != 8) {
             ++count;
         }
         return count;

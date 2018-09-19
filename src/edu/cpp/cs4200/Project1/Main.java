@@ -24,10 +24,13 @@ public class Main {
         //   then each of those will have a n=2 array for h1 and then h2, so that they can be easily compared
 
         //tests:
-        Board testBoard = new Board(new Integer[]{4, 2, 0, 1, 8, 7, 6, 5, 3});
+        Board testBoard = new Board(new Integer[]{1, 2, 5, 4, 8, 7, 0, 3, 6});
+        testBoard.solveManhattan();
+        System.out.println();
+        testBoard.solveHamming();
 
-        Board myBoard = new Board();
-        myBoard.runIterations();
+        //Board myBoard = new Board();
+        //myBoard.runIterations();
 
 
     }

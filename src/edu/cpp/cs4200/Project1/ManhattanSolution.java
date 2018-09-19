@@ -10,7 +10,7 @@ public class ManhattanSolution {
     private static Integer[] emptyParent = new Integer[]{0,0,0,0,0,0,0,0,0,0};
     private static Node emptyNodeParent = new Node(emptyParent, Integer.MAX_VALUE, Integer.MAX_VALUE, null);
 
-    public static HammingData solve(Integer[] board) {
+    public static SolutionData solve(Integer[] board) {
         Node nodeStart = new Node(board, getManhattan(board), 0, emptyNodeParent);
         depth = 0;
         solutionSize = 0;
@@ -72,11 +72,11 @@ public class ManhattanSolution {
 
         if (depth < 23) {
             //node current should be guaranteed to the the smallest node
-            HammingData output = new HammingData(printSolution(finalNode), solutionSize);
+            SolutionData output = new SolutionData(printSolution(finalNode), solutionSize);
             return output;
         }
 
-        return new HammingData(0, 0);
+        return new SolutionData(0, 0);
     }
 
 
@@ -257,16 +257,43 @@ public class ManhattanSolution {
     }
 
     private static boolean checkIfFinished(Integer[] gameBoard) {
-        Integer[] solutionArray = {1,2,3,4,5,6,7,8};
-        List gameList = new ArrayList(Arrays.asList(gameBoard));
-        gameList.remove(gameList.indexOf(0));
+        Integer[] solutionArray = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
-        return Arrays.equals(solutionArray, gameList.toArray());
+        return Arrays.equals(solutionArray, gameBoard);
     }
-    public static int getManhattan(Integer[] boardInput){
 
+    private static int getManhattan(Integer[] boardInput) {
+        int k = 0;
+        int manhattanH = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                manhattanH += getWeight(i, j, boardInput[k]);
+                k++;
+            }
+        }
 
-        //temporary
-        return Integer.parseInt(null);
+        return manhattanH;
+    }
+
+    private static int getWeight(int i, int j, Integer in) {
+        int weight = 0;
+        if (in == 1) {
+            return (Math.abs(i) + Math.abs(j - 1));
+        } else if (in == 2) {
+            return (Math.abs(i) + Math.abs(j - 2));
+        } else if (in == 3) {
+            return (Math.abs(i - 1) + Math.abs(j));
+        } else if (in == 4) {
+            return (Math.abs(i - 1) + Math.abs(j - 1));
+        } else if (in == 5) {
+            return (Math.abs(i - 1) + Math.abs(j - 2));
+        } else if (in == 6) {
+            return (Math.abs(i - 2) + Math.abs(j));
+        } else if (in == 7) {
+            return (Math.abs(i - 2) + Math.abs(j - 1));
+        } else if (in == 8) {
+            return (Math.abs(i - 2) + Math.abs(j - 2));
+        }
+        return weight;
     }
 }

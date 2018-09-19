@@ -5,14 +5,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static edu.cpp.cs4200.Project1.MoveTile.*;
-
 public class Board {
     private List<Integer> gameBoard = new ArrayList();
     private boolean validBoard;
     private int[] hammingSearchCost = new int[25];
     private int[] hammingSearchIterations = new int[25];
-    private int[] hammingIterations = new int[25];
+    private int[] manhattanSearchCost = new int[25];
+    private int[] manhattanSearchIterations = new int[25];
 
     public Board() {
         for(int i = 0; i < 9; i++){
@@ -24,18 +23,29 @@ public class Board {
     public Board(Integer[] inputBoard){
          gameBoard = Arrays.asList(inputBoard);
     }
-    //used for basic program, not the 1000 iterations test
+
+
     public void solveHamming(){
          isValid();
          if(validBoard) {
-             HammingData output = HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
+             SolutionData output = HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
              hammingSearchCost[output.depth] = hammingSearchCost[output.depth] + output.searchCost;
-             int hammingIters = hammingSearchIterations[output.depth];
-             hammingSearchIterations[output.depth] = ++hammingIters;
+             int hammingIteration = hammingSearchIterations[output.depth];
+             hammingSearchIterations[output.depth] = ++hammingIteration;
          }
     }
 
-    //practice with 100 first
+    public void solveManhattan() {
+        isValid();
+        if (validBoard) {
+            SolutionData output = ManhattanSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
+            manhattanSearchCost[output.depth] = manhattanSearchCost[output.depth] + output.searchCost;
+            int manhattanIteration = manhattanSearchIterations[output.depth];
+            manhattanSearchIterations[output.depth] = ++manhattanIteration;
+        }
+    }
+
+
     public void runIterations() {
         for (int i = 0; i < 1000; i++) {
             randomizeBoard();
@@ -50,7 +60,6 @@ public class Board {
         }
     }
 
-        //a definite depth, consider complete randomization though
     private void randomizeBoard(){
         Collections.sort(gameBoard);
         for(int i = 0; i < 9; i++){
