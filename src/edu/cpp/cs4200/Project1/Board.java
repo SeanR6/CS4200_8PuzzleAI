@@ -29,19 +29,24 @@ public class Board {
          isValid();
          if(validBoard) {
              HammingData output = HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
-             hammingSearchCost[output.depth] = output.searchCost;
-             hammingSearchIterations[output.depth] = hammingSearchIterations[output.depth]++;
+             hammingSearchCost[output.depth] = hammingSearchCost[output.depth] + output.searchCost;
+             int hammingIters = hammingSearchIterations[output.depth];
+             hammingSearchIterations[output.depth] = ++hammingIters;
          }
     }
 
     //practice with 100 first
     public void runIterations() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
             randomizeBoard();
             solveHamming();
         }
         for (int i = 2; i < hammingSearchIterations.length; i += 1) {
-            System.out.println(i + " | " + (hammingSearchCost[i] / hammingSearchIterations[i]));
+            if (hammingSearchIterations[i] != 0) {
+                System.out.println(i + " | " + (hammingSearchCost[i] + " |" + hammingSearchIterations[i]));
+            } else {
+                System.out.println(i + " | " + 0);
+            }
         }
     }
 

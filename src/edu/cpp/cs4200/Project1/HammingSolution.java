@@ -22,7 +22,7 @@ public class HammingSolution {
         openList.add(nodeStart);
         Node q;
         Queue<Node> children;
-        while (!openList.isEmpty() && depth < 25) {
+        while (!openList.isEmpty() && depth < 23) {
             q = openList.poll();
             depth = q.depth;
             children = generateSuccessors(q);
@@ -70,7 +70,7 @@ public class HammingSolution {
             closedList.add(q);
         }
 
-        if (depth < 25) {
+        if (depth < 23) {
             //node current should be guaranteed to the the smallest node
             HammingData output = new HammingData(printSolution(finalNode), solutionSize);
             return output;
