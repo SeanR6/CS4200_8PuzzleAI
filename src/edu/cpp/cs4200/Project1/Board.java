@@ -5,13 +5,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static edu.cpp.cs4200.Project1.MoveTile.*;
+
 public class Board {
     private List<Integer> gameBoard = new ArrayList();
     private boolean validBoard;
     private int[] hammingSearchCost = new int[25];
+    private int[] hammingSearchIterations = new int[25];
     private int[] hammingIterations = new int[25];
-    //TODO create temporary program that runs 100 iterations of each, then modify to fit the descriptions of the project
-    Board(){
+
+    public Board() {
         for(int i = 0; i < 9; i++){
             gameBoard.add(i);
         }
@@ -25,10 +28,23 @@ public class Board {
     public void solveHamming(){
          isValid();
          if(validBoard) {
-             HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
+             HammingData output = HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
+             hammingSearchCost[output.depth] = output.searchCost;
+             hammingSearchIterations[output.depth] = hammingSearchIterations[output.depth]++;
          }
     }
-    //TODO generate new function that allows us to generate a board using n number of moves such that we can have
+
+    //practice with 100 first
+    public void runIterations() {
+        for (int i = 0; i < 100; i++) {
+            randomizeBoard();
+            solveHamming();
+        }
+        for (int i = 2; i < hammingSearchIterations.length; i += 1) {
+            System.out.println(i + " | " + (hammingSearchCost[i] / hammingSearchIterations[i]));
+        }
+    }
+
         //a definite depth, consider complete randomization though
     private void randomizeBoard(){
         Collections.sort(gameBoard);
@@ -40,7 +56,7 @@ public class Board {
     public void isValid(){
         Integer[] array = gameBoard.toArray(new Integer[gameBoard.size()]);
         validBoard = ValidCheck.isValid(array);
-        UI.printValidity(validBoard);
+        //UI.printValidity(validBoard);
     }
 
     public void generateNewBoard(){
@@ -50,4 +66,5 @@ public class Board {
     public void printBoard(){
         UI.printBoard(gameBoard);
     }
+
 }

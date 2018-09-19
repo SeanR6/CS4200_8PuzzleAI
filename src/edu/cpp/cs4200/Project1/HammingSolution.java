@@ -2,13 +2,15 @@ package edu.cpp.cs4200.Project1;
 
 import java.util.*;
 
+import static edu.cpp.cs4200.Project1.MoveTile.*;
+
 public class HammingSolution {
     private static int depth;
     private static int solutionSize;
     private static Integer[] emptyParent = new Integer[]{0,0,0,0,0,0,0,0,0,0};
     private static Node emptyNodeParent = new Node(emptyParent, Integer.MAX_VALUE, Integer.MAX_VALUE, null);
 
-    public static Node solve(Integer[] board){
+    public static HammingData solve(Integer[] board) {
         Node nodeStart = new Node(board, getHamming(board), 0, emptyNodeParent);
         depth = 0;
         solutionSize = 0;
@@ -20,7 +22,7 @@ public class HammingSolution {
         openList.add(nodeStart);
         Node q;
         Queue<Node> children;
-        while(!openList.isEmpty()){
+        while (!openList.isEmpty() && depth < 25) {
             q = openList.poll();
             depth = q.depth;
             children = generateSuccessors(q);
@@ -68,11 +70,13 @@ public class HammingSolution {
             closedList.add(q);
         }
 
+        if (depth < 25) {
+            //node current should be guaranteed to the the smallest node
+            HammingData output = new HammingData(printSolution(finalNode), solutionSize);
+            return output;
+        }
 
-
-        //node current should be guaranteed to the the smallest node
-        printSolution(finalNode);
-        return nodeStart;
+        return new HammingData(0, 0);
     }
 
 
@@ -113,7 +117,7 @@ public class HammingSolution {
         return true;
     }
 
-    private static void printSolution(Node nodeCurrent) {
+    private static int printSolution(Node nodeCurrent) {
         Stack<Node> printStack = new Stack<>();
         Node currentNode = nodeCurrent;
         int treeDepth = 0;
@@ -127,6 +131,7 @@ public class HammingSolution {
         }
         System.out.println("Solution depth " + (treeDepth - 1));
         System.out.println("Solution size " + solutionSize);
+        return treeDepth;
     }
 
     private static Queue<Node> generateSuccessors(Node nodeCurrent) {
@@ -249,34 +254,6 @@ public class HammingSolution {
             }
         }
         return output;
-    }
-
-    private static Integer[] moveDown(Integer[] inBoard, int i) {
-        int temp = inBoard[i];
-        inBoard[i] = inBoard[i+3];
-        inBoard[i+3] = temp;
-        return inBoard;
-    }
-
-    private static Integer[] moveRight(Integer[] inBoard, int i) {
-        int temp = inBoard[i];
-        inBoard[i] = inBoard[i+1];
-        inBoard[i+1] = temp;
-        return inBoard;
-    }
-
-    private static Integer[] moveUp(Integer[] inBoard, int i) {
-        int temp = inBoard[i];
-        inBoard[i] = inBoard[i-3];
-        inBoard[i-3] = temp;
-        return inBoard;
-    }
-
-    private static Integer[] moveLeft(Integer[] inBoard, int i) {
-        int temp = inBoard[i];
-        inBoard[i] = inBoard[i-1];
-        inBoard[i-1] = temp;
-        return inBoard;
     }
 
     private static boolean checkIfFinished(Integer[] gameBoard) {
