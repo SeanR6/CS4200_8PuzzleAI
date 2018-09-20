@@ -1,7 +1,6 @@
 package edu.cpp.cs4200.Project1;
 
 import java.util.List;
-import java.util.Queue;
 
 public class UI {
     //this class allows for interaction with the user. Gets input and prints output. Allows for the other files
@@ -29,4 +28,31 @@ public class UI {
         }
     }
 
+    public static void printMainPrompt() {
+        System.out.println("Enter r to generate a random board, c to enter custom board, or e to exit");
+        System.out.println("Note: A puzzle is not guaranteed to be solvable, or solvable in a reasonable time");
+        System.out.println("If the puzzle takes 25 moves or more the puzzle is skipped and you will be re-prompted");
+    }
+
+    public static void printEntryError() {
+        System.out.println("Invalid entry, try again");
+    }
+
+    public static void exitText() {
+        System.out.println("Program exiting now...");
+    }
+
+    public static void randomGen() {
+        System.out.println("Generating random puzzle...");
+    }
+
+    public static void boardEntryPrompt() {
+        System.out.println("Please enter your puzzle one number at a time in order of left to right then up to down");
+        System.out.println("i.e (1,1) then (1,2) then (1,3) then (2,1) etc.");
+        System.out.println("only numbers 0-8 will be accepted, where 0 is the blank space");
+    }
+
+    public static void boardSpacePrompt(int i) {
+        System.out.println("Please enter the number for space number " + (i + 1) + ": ");
+    }
 }

@@ -1,5 +1,8 @@
 package edu.cpp.cs4200.Project1;
 
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -23,14 +26,47 @@ public class Main {
         //^^each node depth will have its own set of costs, try maybe an array of the depth
         //   then each of those will have a n=2 array for h1 and then h2, so that they can be easily compared
 
-        Board b = new Board();
-        b.runIterations();
 
-        boolean programVar = false;
+        //for running large number of iterations
+        //Board b = new Board();
+        //b.runIterations();
+
+        boolean programVar = true;
+        char userInput;
+        Scanner input = new Scanner(System.in);
+        Scanner entry = new Scanner(System.in);
         while (programVar) {
-            System.out.println();
-
+            UI.printMainPrompt();
+            userInput = input.next().charAt(0);
+            if (userInput == 'r' || userInput == 'R') {
+                UI.randomGen();
+                Board board = new Board();
+                board.solveBoth();
+            } else if (userInput == 'c' || userInput == 'C') {
+                UI.boardEntryPrompt();
+                Integer[] userBoard = new Integer[9];
+                for (int i = 0; i < 9; i++) {
+                    UI.boardSpacePrompt(i);
+                    char numberIn = entry.next().charAt(0);
+                    int number = numberIn - '0';
+                    if (number >= 0 && number <= 8 && !(Arrays.asList(userBoard).contains(number))) {
+                        userBoard[i] = number;
+                    } else {
+                        System.out.println("Invalid input, or number already used");
+                        i--;
+                    }
+                }
+                Board board = new Board(userBoard);
+                board.solveBoth();
+            } else if (userInput == 'e' || userInput == 'E') {
+                UI.exitText();
+                programVar = false;
+            } else {
+                UI.printEntryError();
+            }
+            System.out.println("\n--------------------------\n");
         }
-
+        input.close();
+        entry.close();
     }
 }
