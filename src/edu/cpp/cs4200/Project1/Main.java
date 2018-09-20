@@ -23,15 +23,14 @@ public class Main {
         //^^each node depth will have its own set of costs, try maybe an array of the depth
         //   then each of those will have a n=2 array for h1 and then h2, so that they can be easily compared
 
-        //tests:
-        Board testBoard = new Board(new Integer[]{1, 2, 5, 4, 8, 7, 0, 3, 6});
-        testBoard.solveManhattan();
-        System.out.println();
-        testBoard.solveHamming();
+        Board b = new Board();
+        b.solveBoth();
 
-        //Board myBoard = new Board();
-        //myBoard.runIterations();
+        boolean programVar = false;
+        while (programVar) {
+            System.out.println();
 
+        }
 
     }
 }

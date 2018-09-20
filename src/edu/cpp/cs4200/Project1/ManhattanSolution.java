@@ -51,7 +51,7 @@ public class ManhattanSolution {
                     }
                 }
                 index = containsBoard(child, closedList);
-                Node item = null;
+                Node item;
                 if(index < closedList.size()){
                     item = closedList.get(index);
                     if(child.weight < item.weight){
@@ -64,7 +64,7 @@ public class ManhattanSolution {
                 }
                 openList.add(child);
             }
-            if(finished == true){
+            if (finished) {
                 break;
             }
             closedList.add(q);
@@ -72,8 +72,7 @@ public class ManhattanSolution {
 
         if (depth < 23) {
             //node current should be guaranteed to the the smallest node
-            SolutionData output = new SolutionData(printSolution(finalNode), solutionSize);
-            return output;
+            return new SolutionData(printSolution(finalNode), solutionSize);
         }
 
         return new SolutionData(0, 0);
@@ -130,7 +129,7 @@ public class ManhattanSolution {
             UI.printBoard(printStack.pop().gameBoard);
         }
         System.out.println("Solution depth " + (treeDepth - 1));
-        System.out.println("Solution size " + solutionSize);
+        System.out.println("Manhattan Solution size " + solutionSize);
         return treeDepth;
     }
 

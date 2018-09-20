@@ -45,15 +45,24 @@ public class Board {
         }
     }
 
+    public void solveBoth() {
+        isValid();
+        if (validBoard) {
+            ManhattanSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
+            HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
+        }
+    }
+
 
     public void runIterations() {
         for (int i = 0; i < 1000; i++) {
             randomizeBoard();
+            solveManhattan();
             solveHamming();
         }
         for (int i = 2; i < hammingSearchIterations.length; i += 1) {
             if (hammingSearchIterations[i] != 0) {
-                System.out.println(i + " | " + (hammingSearchCost[i] + " |" + hammingSearchIterations[i]));
+                System.out.println(i + " | " + (hammingSearchCost[i] + " | " + hammingSearchIterations[i] + " | " + manhattanSearchCost[i]));
             } else {
                 System.out.println(i + " | " + 0);
             }
@@ -70,7 +79,7 @@ public class Board {
     public void isValid(){
         Integer[] array = gameBoard.toArray(new Integer[gameBoard.size()]);
         validBoard = ValidCheck.isValid(array);
-        //UI.printValidity(validBoard);
+        UI.printValidity(validBoard);
     }
 
     public void generateNewBoard(){

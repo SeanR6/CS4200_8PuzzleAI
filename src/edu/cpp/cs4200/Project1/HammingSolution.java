@@ -127,10 +127,9 @@ public class HammingSolution {
             treeDepth++;
         }
         while(!printStack.isEmpty()){
-            UI.printBoard(printStack.pop().gameBoard);
+            printStack.pop();
         }
-        System.out.println("Solution depth " + (treeDepth - 1));
-        System.out.println("Solution size " + solutionSize);
+        System.out.println("Hamming solution size " + solutionSize);
         return treeDepth;
     }
 
