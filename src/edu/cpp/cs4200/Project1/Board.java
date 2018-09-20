@@ -26,23 +26,19 @@ public class Board {
 
 
     public void solveHamming(){
-         isValid();
-         if(validBoard) {
              SolutionData output = HammingSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
              hammingSearchCost[output.depth] = hammingSearchCost[output.depth] + output.searchCost;
              int hammingIteration = hammingSearchIterations[output.depth];
              hammingSearchIterations[output.depth] = ++hammingIteration;
-         }
+
     }
 
     public void solveManhattan() {
-        isValid();
-        if (validBoard) {
             SolutionData output = ManhattanSolution.solve(gameBoard.toArray(new Integer[gameBoard.size()]));
             manhattanSearchCost[output.depth] = manhattanSearchCost[output.depth] + output.searchCost;
             int manhattanIteration = manhattanSearchIterations[output.depth];
             manhattanSearchIterations[output.depth] = ++manhattanIteration;
-        }
+
     }
 
     public void solveBoth() {
@@ -55,16 +51,28 @@ public class Board {
 
 
     public void runIterations() {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 500; i++) {
             randomizeBoard();
-            solveManhattan();
-            solveHamming();
+            isValid();
+            if (validBoard) {
+                solveManhattan();
+                solveHamming();
+                continue;
+            }
+            --i;
         }
+        System.out.printf("%-22s%-22s%-22s%-22s", "depth", "Iterations", "Hamming", "Manhattan");
+        System.out.println();
         for (int i = 2; i < hammingSearchIterations.length; i += 1) {
             if (hammingSearchIterations[i] != 0) {
-                System.out.println(i + " | " + (hammingSearchCost[i] + " | " + hammingSearchIterations[i] + " | " + manhattanSearchCost[i]));
+                int hammingCost = hammingSearchCost[i] / hammingSearchIterations[i];
+                int manhattanCost = manhattanSearchCost[i] / hammingSearchIterations[i];
+                //System.out.println(i + " | " + (hammingSearchCost[i] + " | " + hammingSearchIterations[i] + " | " + manhattanSearchCost[i]));
+                System.out.printf("%-22s%-22s%-22s%-22s", i, hammingSearchIterations[i], hammingCost, manhattanCost);
+                System.out.println();
             } else {
-                System.out.println(i + " | " + 0);
+                System.out.printf("%-22s%-22s%-22s%-22s", i, 0, 0, 0);
+                System.out.println();
             }
         }
     }

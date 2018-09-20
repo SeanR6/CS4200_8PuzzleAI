@@ -74,7 +74,7 @@ public class ManhattanSolution {
             //node current should be guaranteed to the the smallest node
             return new SolutionData(printSolution(finalNode), solutionSize);
         }
-
+        System.out.println("Solution too large");
         return new SolutionData(0, 0);
     }
 
