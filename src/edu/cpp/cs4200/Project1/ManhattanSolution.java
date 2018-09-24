@@ -10,7 +10,7 @@ public class ManhattanSolution {
     private static Integer[] emptyParent = new Integer[]{0,0,0,0,0,0,0,0,0,0};
     private static Node emptyNodeParent = new Node(emptyParent, Integer.MAX_VALUE, Integer.MAX_VALUE, null);
 
-    public static SolutionData solve(Integer[] board) {
+    public static void solve(Integer[] board) {
         Node nodeStart = new Node(board, getManhattan(board), 0, emptyNodeParent);
         depth = 0;
         solutionSize = 0;
@@ -41,7 +41,7 @@ public class ManhattanSolution {
                     while(index > 0){
                         item = iter.next();
                         index--;
-                    }//TODO fix weight comparison, it is always being set to 6
+                    }
                     if(child.weight < item.weight){
                         openList.remove(item);
                         openList.add(child);
@@ -72,15 +72,15 @@ public class ManhattanSolution {
 
         if (depth < 23) {
             //node current should be guaranteed to the the smallest node
-            return new SolutionData(printSolution(finalNode), solutionSize);
+            new SolutionData(printSolution(finalNode), solutionSize);
+            return;
         }
         System.out.println("Solution too large");
-        return new SolutionData(0, 0);
+        new SolutionData(0, 0);
     }
 
 
-
-    static int containsBoard(Node in, PriorityQueue<Node> q){
+    private static int containsBoard(Node in, PriorityQueue<Node> q) {
         Iterator<Node> i = q.iterator();
         int index = 0;
         while(i.hasNext()){
@@ -93,7 +93,7 @@ public class ManhattanSolution {
         return index;
     }
 
-    static int containsBoard(Node in, List<Node> list){
+    private static int containsBoard(Node in, List<Node> list) {
         Iterator<Node> i = list.iterator();
         int index = 0;
         while(i.hasNext()){
@@ -107,7 +107,7 @@ public class ManhattanSolution {
         return index;
     }
 
-    static boolean comparator(Integer[] a, Integer[] b){
+    private static boolean comparator(Integer[] a, Integer[] b) {
         for(int i = 0; i < 9; i++){
             if(a[i] != b[i]){
                 return false;
@@ -227,8 +227,8 @@ public class ManhattanSolution {
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getManhattan(tempBoard), depth + 1, nodeCurrent));
             }
-            solutionSize += 2;
         }else if(currentBoard[7] == 0){
+            solutionSize += 2;
             tempBoard = moveLeft(currentBoard.clone(), 7);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getManhattan(tempBoard), depth + 1, nodeCurrent));

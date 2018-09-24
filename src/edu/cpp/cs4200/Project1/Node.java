@@ -7,7 +7,7 @@ public class Node {
     int hueristic;
     Node parent;
 
-    public Node(Integer[] board, int heuristicIn, int depthIn, Node p){
+    Node(Integer[] board, int heuristicIn, int depthIn, Node p) {
         gameBoard = board;
         hueristic = heuristicIn;
         weight = heuristicIn + depthIn;

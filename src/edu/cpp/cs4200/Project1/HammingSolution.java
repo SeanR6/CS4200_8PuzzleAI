@@ -10,7 +10,7 @@ public class HammingSolution {
     private static Integer[] emptyParent = new Integer[]{0,0,0,0,0,0,0,0,0,0};
     private static Node emptyNodeParent = new Node(emptyParent, Integer.MAX_VALUE, Integer.MAX_VALUE, null);
 
-    public static SolutionData solve(Integer[] board) {
+    public static void solve(Integer[] board) {
         Node nodeStart = new Node(board, getHamming(board), 0, emptyNodeParent);
         depth = 0;
         solutionSize = 0;
@@ -41,7 +41,7 @@ public class HammingSolution {
                     while(index > 0){
                         item = iter.next();
                         index--;
-                    }//TODO fix weight comparison, it is always being set to 6
+                    }
                     if(child.weight < item.weight){
                         openList.remove(item);
                         openList.add(child);
@@ -64,7 +64,7 @@ public class HammingSolution {
                 }
                 openList.add(child);
             }
-            if(finished == true){
+            if (finished) {
                 break;
             }
             closedList.add(q);
@@ -73,15 +73,14 @@ public class HammingSolution {
         if (depth < 23) {
             //node current should be guaranteed to the the smallest node
             SolutionData output = new SolutionData(printSolution(finalNode), solutionSize);
-            return output;
+            return;
         }
 
-        return new SolutionData(0, 0);
+        new SolutionData(0, 0);
     }
 
 
-
-    static int containsBoard(Node in, PriorityQueue<Node> q){
+    private static int containsBoard(Node in, PriorityQueue<Node> q) {
         Iterator<Node> i = q.iterator();
         int index = 0;
         while(i.hasNext()){
@@ -94,7 +93,7 @@ public class HammingSolution {
         return index;
     }
 
-    static int containsBoard(Node in, List<Node> list){
+    private static int containsBoard(Node in, List<Node> list) {
         Iterator<Node> i = list.iterator();
         int index = 0;
         while(i.hasNext()){
@@ -108,7 +107,7 @@ public class HammingSolution {
         return index;
     }
 
-    static boolean comparator(Integer[] a, Integer[] b){
+    private static boolean comparator(Integer[] a, Integer[] b) {
         for(int i = 0; i < 9; i++){
             if(a[i] != b[i]){
                 return false;
@@ -227,8 +226,8 @@ public class HammingSolution {
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
             }
-            solutionSize += 2;
         }else if(currentBoard[7] == 0){
+            solutionSize += 2;
             tempBoard = moveLeft(currentBoard.clone(), 7);
             if(!Arrays.equals(tempBoard, nodeCurrent.parent.gameBoard)){
                 output.add(new Node(tempBoard, getHamming(tempBoard), depth + 1, nodeCurrent));
@@ -261,7 +260,7 @@ public class HammingSolution {
         return Arrays.equals(solutionArray, gameBoard);
     }
 
-    public static int getHamming(Integer[] board) {
+    private static int getHamming(Integer[] board) {
 
 
         //returns the heuristic for manhattan
